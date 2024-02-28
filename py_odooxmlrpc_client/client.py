@@ -73,6 +73,9 @@ class ClientOdooXMLRPCBase(ClientOdooXMLRPC):
     def __init__(self, dbname, username, password, url, **kwargs):
         super().__init__(dbname, username, password, url,**kwargs)
 
+    def _implemented_behaviour(self, func, *args, **kwargs):
+        return super()._implemented_behaviour(func, *args, **kwargs)
+
 
 class ClientOdooXMLRPCModel(ClientOdooXMLRPC):
     
