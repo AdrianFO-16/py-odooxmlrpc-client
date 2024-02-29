@@ -40,7 +40,6 @@ class ClientOdooXMLRPC(ABC.ABC):
         self.uid = common.authenticate(self.dbname, self.username, self.password, {})
         if not self.uid:
             raise ConnectionError("Connection not sucessfull")
-
         self.env = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(self.url))
 
     @ABC.abstractmethod
@@ -57,16 +56,16 @@ class ClientOdooXMLRPC(ABC.ABC):
         return wrapper
         
     @__env_query
-    def search(self, model, domain):
-        return self.env.execute_kw(self.dbname, self.uid, self.password, model, 'search', [domain])
+    def search(self, model, domain, **kwargs):
+        return self.env.execute_kw(self.dbname, self.uid, self.password, model, 'search', [domain], kwargs)
     
     @__env_query
-    def read(self, model, ids, fields):
-        return self.env.execute_kw(self.dbname, self.uid, self.password, model, 'read', [ids], {'fields': fields})
+    def read(self, model, ids, fields, **kwargs):
+        return self.env.execute_kw(self.dbname, self.uid, self.password, model, 'read', [ids], {'fields': fields}, kwargs)
     
     @__env_query
-    def search_read(self, model, domain, fields):
-        return self.env.execute_kw(self.dbname, self.uid, self.password, model, 'search_read', [domain], {'fields': fields})
+    def search_read(self, model, domain, fields, **kwargs):
+        return self.env.execute_kw(self.dbname, self.uid, self.password, model, 'search_read', [domain], {'fields': fields}, kwargs)
 
 
 class ClientOdooXMLRPCBase(ClientOdooXMLRPC):
