@@ -18,7 +18,7 @@ class ClientOdooXMLRPC(ABC.ABC):
         self.__init_connection()
 
     @staticmethod
-    def create(**kwargs):
+    def client(**kwargs):
         if 'model' in kwargs:
             return ClientOdooXMLRPCModel(**kwargs)
         else:
@@ -61,11 +61,19 @@ class ClientOdooXMLRPC(ABC.ABC):
     
     @__env_query
     def read(self, model, ids, fields, **kwargs):
-        return self.env.execute_kw(self.dbname, self.uid, self.password, model, 'read', [ids], {'fields': fields}, kwargs)
-    
+        return self.env.execute_kw(self.dbname, self.uid, self.password, model, 'read', [ids], {'fields': fields} | kwargs)
+     
     @__env_query
     def search_read(self, model, domain, fields, **kwargs):
-        return self.env.execute_kw(self.dbname, self.uid, self.password, model, 'search_read', [domain], {'fields': fields}, kwargs)
+        return self.env.execute_kw(self.dbname, self.uid, self.password, model, 'search_read', [domain], {'fields': fields} | kwargs)
+    
+    @__env_query
+    def create(self, model, values, **kwargs):
+        return self.env.execute_kw(self.dbname, self.uid, self.password, model, 'create', [values], kwargs)
+    
+    @__env_query
+    def write(self, model, ids, values, **kwargs):
+        return self.env.execute_kw(self.dbname, self.uid, self.password, model, 'write', [ids, values], kwargs)
 
 
 class ClientOdooXMLRPCBase(ClientOdooXMLRPC):
